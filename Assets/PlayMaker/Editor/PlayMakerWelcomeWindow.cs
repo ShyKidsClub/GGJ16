@@ -18,7 +18,7 @@ namespace HutongGames.PlayMakerEditor
     public class PlayMakerWelcomeWindow : EditorWindow
     {
         private const string installCurrentVersion = "1.7.8.4";
-        private const string installBetaVersion = "1.8.0 BETA RC39";
+        private const string installBetaVersion = "1.8.0 BETA RC41";
 
         private const string editorPrefsLastVersion = "PlayMaker.LastVersion";
         private const string editorPrefsShowAtStartup = "PlayMaker.ShowWelcomeScreen";
@@ -457,6 +457,17 @@ namespace HutongGames.PlayMakerEditor
         {
             GUILayout.BeginVertical();
             GUILayout.FlexibleSpace();
+
+            DrawLink(addonsIcon,
+                 "Ecosystem",
+                 "An integrated online browser for custom actions, samples and addons.",
+                 OpenUrl, urlEcosystemWiki);
+
+            DrawLink(addonsIcon,
+                 "Add-Ons",
+                 "Find action packs and add-ons for NGUI, 2D Toolkit, Mecanim, Pathfinding, Smooth Moves, Ultimate FPS...",
+                 OpenUrl, urlAddonsWiki);
+
             if (setupPhoton)
             {
                 DrawLink(photonIcon,
@@ -473,16 +484,6 @@ namespace HutongGames.PlayMakerEditor
                      "and application for PC, Mac, Browser, Mobile or Console.",
                      OpenUrl, urlPhotonAddon);
             }
-
-            DrawLink(addonsIcon,
-                 "Ecosystem",
-                 "An integrated online browser for custom actions, samples and addons.",
-                 OpenUrl, urlEcosystemWiki);
-
-            DrawLink(addonsIcon,
-                 "Add-Ons",
-                 "Find action packs and add-ons for NGUI, 2D Toolkit, Mecanim, Pathfinding, Smooth Moves, Ultimate FPS...",
-                 OpenUrl, urlAddonsWiki);
 
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
@@ -523,6 +524,7 @@ namespace HutongGames.PlayMakerEditor
             if (Event.current.type == EventType.mouseDown && rect.Contains(Event.current.mousePosition))
             {
                 func(userData);
+                GUIUtility.ExitGUI();
             }
 
             GUILayout.Space(10);
@@ -602,7 +604,7 @@ namespace HutongGames.PlayMakerEditor
                 // Use GUID in case user has moved Playmaker folder
                 ImportPackage(AssetDatabase.GUIDToAssetPath("f982487afa4f0444ea11e90a9d05b94e"));
             }
-        }
+            }
 
         private void ImportPackage(string package)
         {

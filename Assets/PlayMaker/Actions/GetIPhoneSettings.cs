@@ -44,7 +44,7 @@ namespace HutongGames.PlayMaker.Actions
 
         public override void OnEnter()
         {
-#if UNITY_IPHONE
+#if UNITY_IPHONE || UNITY_IOS
 			
 			getScreenCanDarken.Value = Screen.sleepTimeout > 0f; //iPhoneSettings.screenCanDarken;
 			getUniqueIdentifier.Value = SystemInfo.deviceUniqueIdentifier; //iPhoneSettings.uniqueIdentifier;

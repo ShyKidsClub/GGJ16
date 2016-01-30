@@ -26,16 +26,20 @@ namespace HutongGames.PlayMaker.Actions
 		[Tooltip("The Int variable to be assigned to.")]
 		public FsmFloat outTimeRemaining = -1;
 
+		[Tooltip("If enabled, it will loop around after the last chord and get the first chord again.")]
+		public bool isLoopEnabled = true;
+
 		[Tooltip("If enabled, it will update every frame.")]
-		public bool isUpdatedEveryFrame;
+		public bool isUpdatedEveryFrame = false;
 
 		public override void Reset()
 		{
-			ballardCurrent = -1;
-			sequenceCurrent = -1;
-			timeCurrent = 0.0f;
-			outTimeRemaining = -1;
+			ballardCurrent		= -1;
+			sequenceCurrent		= -1;
+			timeCurrent			= 0.0f;
+			outTimeRemaining	= -1;
 			isUpdatedEveryFrame = false;
+			isLoopEnabled		= true;
 		}
 
 		public override void OnEnter()
@@ -74,6 +78,14 @@ namespace HutongGames.PlayMaker.Actions
 					outTimeRemaining.Value = timeRemaining;
 					return;
 				}
+			}
+
+			if (isLoopEnabled == true && sequence.chords.Count > 0)
+			{
+				// if we got this far then we've passed the last chord, so let us return the first chord!
+				float nextTime = timeCurrent.Value - ballard.duration;
+				outTimeRemaining.Value = sequence.chords[0].timingStart - nextTime;
+				return;
 			}
 
 			outTimeRemaining.Value = 0.0f;

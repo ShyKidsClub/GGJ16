@@ -94,6 +94,14 @@ public class BallardDatabaseEditor : EditorWindow
 		}
 		EditorGUILayout.EndHorizontal();
 
+		EditorGUILayout.BeginHorizontal();
+		{
+			GUILayout.Space((EditorGUI.indentLevel + 1) * 10.0f);
+			GUILayout.Label("Duration: ", GUILayout.MaxWidth(64.0f));
+			ballard.duration = EditorGUILayout.FloatField(ballard.duration);
+		}
+		EditorGUILayout.EndHorizontal();
+
 		// Ballard Sequences
 		ballard.debug_isFoldedOut = EditorGUILayout.Foldout(ballard.debug_isFoldedOut, "Sequences");
 		if (ballard.debug_isFoldedOut == true)
@@ -190,11 +198,11 @@ public class BallardDatabaseEditor : EditorWindow
 		switch (chord.type)
 		{
 			case ChordData.Type.PRESS: 
-				chord.timingStart = chord.timingStop = EditorGUILayout.DoubleField("Timing: ", chord.timingStop);
+				chord.timingStart = chord.timingStop = EditorGUILayout.FloatField("Timing: ", chord.timingStop);
 				break;
 			case ChordData.Type.HOLD:
-				chord.timingStart = EditorGUILayout.DoubleField("Timing Start: ", chord.timingStart);
-				chord.timingStop = EditorGUILayout.DoubleField("Timing Stop: ", chord.timingStop);
+				chord.timingStart = EditorGUILayout.FloatField("Timing Start: ", chord.timingStart);
+				chord.timingStop = EditorGUILayout.FloatField("Timing Stop: ", chord.timingStop);
 				break;
 		}
 

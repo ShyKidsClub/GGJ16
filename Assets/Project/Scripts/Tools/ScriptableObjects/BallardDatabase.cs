@@ -10,9 +10,7 @@ public class BallardData
 	public bool debug_isFoldedOut = false;
 
 	public string name = "BALLARD OF AWESOME";
-	public double duration = 0.0f;
-	public int beats = 3;
-	public int measures = 4;
+	public float duration = 0.0f;
 	public List<SequenceData> sequences = new List<SequenceData>();
 
 	public BallardData()
@@ -115,8 +113,8 @@ public class ChordData
 	public bool debug_isFoldedOut = false;
 
 	public Type type = Type.PRESS;
-	public double timingStart = 0.0f;
-	public double timingStop = 0.0f;
+	public float timingStart = 0.0f;
+	public float timingStop = 0.0f;
 	public AudioClip clip = null;
 }
 

@@ -24,3 +24,6 @@ ExportedObj/
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
+/Assets/Spine/spine-csharp/spine-csharp.sln.meta
+/Assets/Spine/spine-csharp/spine-csharp.csproj.meta
+/Assets/Spine/spine-csharp/spine-csharp_xna.csproj.meta

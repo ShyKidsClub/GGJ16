@@ -31,22 +31,60 @@ public class SequenceData
 	public string name = "SEQUENCE OF COOL";
 	public List<ChordData> chords = new List<ChordData>();
 
-	public SequenceData()
+	public void AddChord(ChordData chord)
 	{
-		chords.Add(new ChordData());
-		chords.Add(new ChordData());
-		chords.Add(new ChordData());
-		chords.Add(new ChordData());
+		chords.Add(chord);
+	}
+
+	public void RemoveChord(ChordData chord)
+	{
+		chords.Remove(chord);
+	}
+
+	public void RemoveChord(int index)
+	{
+		if (index < 0 || index >= chords.Count)
+			return;
+
+		chords.RemoveAt(index);
+	}
+
+	public int MoveChord(ChordData chord, int amount)
+	{
+		int position = chords.IndexOf(chord) + amount;
+		position = Mathf.Min(position, chords.Count - 1);
+		position = Mathf.Max(0, position);
+
+		chords.Remove(chord);
+		chords.Insert(position, chord);
+		return position;
+	}
+
+	public int MoveChord(int index, int amount)
+	{
+		if (index < 0 || index >= chords.Count)
+			return index;
+
+		ChordData chord = chords[index];
+		return MoveChord(chord, amount);
 	}
 }
 
 [System.Serializable]
 public class ChordData
 {
+	public enum Type
+	{
+		PRESS,
+		HOLD,
+	}
+
 	[HideInInspector]
 	public bool debug_isFoldedOut = false;
 
-	public double timing = 0.0f;
+	public Type type = Type.PRESS;
+	public double timingStart = 0.0f;
+	public double timingStop = 0.0f;
 	public AudioClip clip = null;
 }
 

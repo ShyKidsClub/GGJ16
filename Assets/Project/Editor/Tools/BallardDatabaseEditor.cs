@@ -46,13 +46,15 @@ public class BallardDatabaseEditor : EditorWindow
 		// iterate through all the ballards
 		for (int i = 0; i < target.m_ballards.Count; ++i)
 		{
-			OnGUI_Ballard(i, target.m_ballards[i]);
+			OnGUI_Ballard(target.m_ballards[i]);
 		}
 	}
 
 	bool[] isBallardFoldedOut = new bool[256];
-	void OnGUI_Ballard(int index, BallardData ballard)
+	void OnGUI_Ballard(BallardData ballard)
 	{
+		int index = target.m_ballards.IndexOf(ballard);
+
 		EditorGUILayout.BeginHorizontal();
 		{
 			isBallardFoldedOut[index] = EditorGUILayout.Foldout(isBallardFoldedOut[index], ballard.name);
@@ -99,7 +101,7 @@ public class BallardDatabaseEditor : EditorWindow
 			++EditorGUI.indentLevel;
 			for (int i = 0; i < ballard.sequences.Count; ++i)
 			{
-				OnGUI_Sequence(ballard, ballard.sequences[i], i);
+				OnGUI_Sequence(ballard, ballard.sequences[i]);
 			}
 			--EditorGUI.indentLevel;
 		}
@@ -110,7 +112,7 @@ public class BallardDatabaseEditor : EditorWindow
 		EditorGUILayout.Separator();
 	}
 
-	void OnGUI_Sequence(BallardData parent, SequenceData sequence, int index)
+	void OnGUI_Sequence(BallardData parent, SequenceData sequence)
 	{
 		sequence.debug_isFoldedOut = EditorGUILayout.Foldout(sequence.debug_isFoldedOut, sequence.name);
 		if (sequence.debug_isFoldedOut == false)
@@ -119,37 +121,84 @@ public class BallardDatabaseEditor : EditorWindow
 		++EditorGUI.indentLevel;
 
 		EditorGUILayout.BeginHorizontal();
-
-			GUILayout.Space((EditorGUI.indentLevel+2) * 10.0f);
+		{
+			GUILayout.Space((EditorGUI.indentLevel + 2) * 10.0f);
 			GUILayout.Label("Name: ", GUILayout.MaxWidth(64.0f));
 			sequence.name = EditorGUILayout.TextField(sequence.name);
-
+			if (GUILayout.Button("Add Chord"
+				, EditorStyles.miniButtonLeft
+				, GUILayout.MaxWidth(128.0f)))
+			{
+				sequence.AddChord(new ChordData());
+			}
+			if (GUILayout.Button("Remove Chord"
+				, EditorStyles.miniButtonRight
+				, GUILayout.MaxWidth(128.0f)))
+			{
+				int i = sequence.chords.Count - 1;
+				sequence.RemoveChord(i);
+			}
+		}
 		EditorGUILayout.EndHorizontal();
 
 		for (int i = 0; i < sequence.chords.Count; ++i)
 		{
-			OnGUI_Chord(sequence, sequence.chords[i], i);
+			OnGUI_Chord(sequence, sequence.chords[i]);
 		}
 
 		--EditorGUI.indentLevel;
 	}
 
-	void OnGUI_Chord(SequenceData parent, ChordData chord, int index)
+	void OnGUI_Chord(SequenceData parent, ChordData chord)
 	{
-		string clipName = (chord.clip != null ? chord.clip.name : "Clip");
-		chord.debug_isFoldedOut = EditorGUILayout.Foldout(chord.debug_isFoldedOut, clipName);
+		int index = parent.chords.IndexOf(chord);
+
+		EditorGUILayout.BeginHorizontal();
+		{
+			string clipName = (chord.clip != null ? chord.clip.name : "Chord");
+			chord.debug_isFoldedOut = EditorGUILayout.Foldout(chord.debug_isFoldedOut, clipName);
+
+			if (GUILayout.Button(" + "
+				, EditorStyles.miniButtonLeft
+				, GUILayout.MaxWidth(32.0f)))
+			{
+				int position = parent.MoveChord(index, -1);
+				SwitchValue(ref parent.chords[index].debug_isFoldedOut, ref parent.chords[position].debug_isFoldedOut);
+			}
+			if (GUILayout.Button(" - "
+				, EditorStyles.miniButtonRight
+				, GUILayout.MaxWidth(32.0f)))
+			{
+				int position = parent.MoveChord(index, 1);
+				SwitchValue(ref parent.chords[index].debug_isFoldedOut, ref parent.chords[position].debug_isFoldedOut);
+			}
+			if (GUILayout.Button("Remove"
+				, EditorStyles.miniButtonRight
+				, GUILayout.MaxWidth(128.0f)))
+			{
+				parent.RemoveChord(index);
+			}
+		}
+		EditorGUILayout.EndHorizontal();
+		
 		if (chord.debug_isFoldedOut == false)
 			return;
 
 		++EditorGUI.indentLevel;
 
-		EditorGUILayout.BeginHorizontal();
+		chord.type = (ChordData.Type)EditorGUILayout.EnumPopup("Type: ", chord.type);
+		switch (chord.type)
 		{
-			GUILayout.Space((EditorGUI.indentLevel) * 10.0f);
-			chord.timing = EditorGUILayout.DoubleField(chord.timing);
-			chord.clip = (AudioClip)EditorGUILayout.ObjectField(chord.clip, typeof(AudioClip), false);
+			case ChordData.Type.PRESS: 
+				chord.timingStart = chord.timingStop = EditorGUILayout.DoubleField("Timing: ", chord.timingStop);
+				break;
+			case ChordData.Type.HOLD:
+				chord.timingStart = EditorGUILayout.DoubleField("Timing Start: ", chord.timingStart);
+				chord.timingStop = EditorGUILayout.DoubleField("Timing Stop: ", chord.timingStop);
+				break;
 		}
-		EditorGUILayout.EndHorizontal();
+
+		chord.clip = (AudioClip)EditorGUILayout.ObjectField("Clip: ", chord.clip, typeof(AudioClip), false);
 
 		--EditorGUI.indentLevel;
 	}

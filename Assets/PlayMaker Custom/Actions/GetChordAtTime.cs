@@ -110,11 +110,18 @@ namespace HutongGames.PlayMaker.Actions
 			{
 				ChordData chord = sequence.chords[i];
 
+				float lower = chord.timingStart;
+				float upper = chord.timingStop;
+				if (lower - tolerance.Value < timeCurrent.Value
+					&& timeCurrent.Value < upper + tolerance.Value)
+				{
+					outChordIndex.Value = i;
+					return;
+				}
+
 				// we want to the value that is closest to the current time
 				// for a PRESS chord, timingStart and timingStop are identical
-				float lower = chord.timingStart - (tolerance.Value/2);
 				lower = Mathf.Abs(timeCurrent.Value - lower);
-				float upper = chord.timingStop + (tolerance.Value/2);
 				upper = Mathf.Abs(timeCurrent.Value - upper);
 				float smallest = Mathf.Min(lower, upper);
 

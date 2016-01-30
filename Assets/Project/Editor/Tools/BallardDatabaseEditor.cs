@@ -48,6 +48,8 @@ public class BallardDatabaseEditor : EditorWindow
 		{
 			OnGUI_Ballard(target.m_ballards[i]);
 		}
+
+		EditorUtility.SetDirty(target);
 	}
 
 	bool[] isBallardFoldedOut = new bool[256];

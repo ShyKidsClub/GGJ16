@@ -11,6 +11,8 @@ public class BallardData
 
 	public string name = "BALLARD OF AWESOME";
 	public double duration = 0.0f;
+	public int beats = 3;
+	public int measures = 4;
 	public List<SequenceData> sequences = new List<SequenceData>();
 
 	public BallardData()
@@ -19,6 +21,21 @@ public class BallardData
 		sequences.Add(new SequenceData());
 		sequences.Add(new SequenceData());
 		sequences.Add(new SequenceData());
+	}
+
+	public bool GetSequence(int index, out SequenceData sequence)
+	{
+		if (index < 0 || index >= sequences.Count)
+		{
+			Debug.LogError("Index out of range, Sequence #"
+				+ index.ToString()
+				+ " doesn't exist!");
+			sequence = null;
+			return false;
+		}
+
+		sequence = sequences[index];
+		return true;
 	}
 }
 
@@ -68,6 +85,21 @@ public class SequenceData
 		ChordData chord = chords[index];
 		return MoveChord(chord, amount);
 	}
+
+	public bool GetChord(int index, out ChordData chord)
+	{
+		if (index < 0 || index >= chords.Count)
+		{
+			Debug.LogError("Index out of range, Chord #"
+				+ index.ToString()
+				+ " doesn't exist!");
+			chord = null;
+			return false;
+		}
+
+		chord = chords[index];
+		return true;
+	}
 }
 
 [System.Serializable]
@@ -96,7 +128,7 @@ public class BallardDatabase : ScriptableObject
 		get
 		{
 			if (m_instance == null)
-				m_instance = (BallardDatabase)Resources.Load("GameParameters", typeof(BallardDatabase));
+				m_instance = (BallardDatabase)Resources.Load("BallardDatabase", typeof(BallardDatabase));
 			if (m_instance == null)
 				Debug.LogError("BallardDatabase doesn't exsist yet! Use the Ballard Editor to create one. ->Window/Ballard Editor");
 			return m_instance;
@@ -142,5 +174,20 @@ public class BallardDatabase : ScriptableObject
 
 		BallardData ballard = m_ballards[index];
 		RemoveBallard(ballard);
+	}
+
+	public bool GetBallard(int index, out BallardData ballard)
+	{
+		if (index < 0 || index >= m_ballards.Count)
+		{
+			Debug.LogError("Index out of range, Ballard #"
+				+ index.ToString()
+				+ " doesn't exist!");
+			ballard = null;
+			return false;
+		}
+
+		ballard = m_ballards[index];
+		return true;
 	}
 }

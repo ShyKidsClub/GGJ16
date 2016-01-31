@@ -20,17 +20,14 @@ namespace HutongGames.PlayMaker.Actions
 		[Tooltip("The Chord Index.")]
 		public FsmInt chordCurrent = -1;
 
-		[RequiredField]
 		[UIHint(UIHint.Variable)]
 		[Tooltip("The float variable to be assigned to.")]
 		public FsmFloat outTiming = 0.0f;
 
-		[RequiredField]
 		[UIHint(UIHint.Variable)]
 		[Tooltip("The float variable to be assigned to.")]
 		public FsmFloat outTimingStart = 0.0f;
 
-		[RequiredField]
 		[UIHint(UIHint.Variable)]
 		[Tooltip("The float variable to be assigned to.")]
 		public FsmFloat outTimingStop = 1.0f;

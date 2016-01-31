@@ -4,20 +4,20 @@ using System.Collections;
 namespace HutongGames.PlayMaker.Actions
 {
 	[ActionCategory(ActionCategory.Logic)]
-	[Tooltip("Checks if a float value falls between two other float values.")]
-	public class IsFloatBetween : FsmStateAction
+	[Tooltip("Checks if a float value is within the range of another float.")]
+	public class IsFloatInRange : FsmStateAction
 	{
 		[RequiredField]
 		[Tooltip("The float to check.")]
 		public FsmFloat value = 0.0f;
 
 		[RequiredField]
-		[Tooltip("The first float variable.")]
-		public FsmFloat float1 = 0.0f;
+		[Tooltip("The target value.")]
+		public FsmFloat target = 0.0f;
 
 		[RequiredField]
-		[Tooltip("The second float variable.")]
-		public FsmFloat float2 = 1.0f;
+		[Tooltip("The allowed threshold.")]
+		public FsmFloat threshold = 0.0f;
 
 		[Tooltip("Event sent if the Value IS between Float 1 and Float 2")]
 		public FsmEvent isTrue = null;
@@ -31,8 +31,8 @@ namespace HutongGames.PlayMaker.Actions
 		public override void Reset()
 		{
 			value				= 0.0f;
-			float1				= 0.0f;
-			float2				= 1.0f;
+			target				= 0.0f;
+			threshold			= 0.0f;
 			isTrue				= null;
 			isFalse				= null;
 			isUpdatedEveryFrame = false;
@@ -43,7 +43,7 @@ namespace HutongGames.PlayMaker.Actions
 			if (isUpdatedEveryFrame == true)
 				return;
 
-			IsBetween();
+			InRange();
 		}
 
 		public override void OnUpdate()
@@ -51,12 +51,12 @@ namespace HutongGames.PlayMaker.Actions
 			if (isUpdatedEveryFrame == false)
 				return;
 
-			IsBetween();
+			InRange();
 		}
 
-		private void IsBetween()
+		private void InRange()
 		{
-			if (float1.Value < value.Value && value.Value < float2.Value)
+			if (target.Value - threshold.Value <= value.Value && value.Value <= target.Value + threshold.Value)
 			{
 				Fsm.Event(isTrue);
 			}

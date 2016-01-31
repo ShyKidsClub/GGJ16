@@ -20,17 +20,14 @@ namespace HutongGames.PlayMaker.Actions
 		[Tooltip("The Chord Index.")]
 		public FsmInt chordCurrent = -1;
 
-		[RequiredField]
 		[UIHint(UIHint.Variable)]
 		[Tooltip("The float variable to be assigned to.")]
 		public FsmFloat outTiming = 0.0f;
 
-		[RequiredField]
 		[UIHint(UIHint.Variable)]
 		[Tooltip("The float variable to be assigned to.")]
 		public FsmFloat outTimingStart = 0.0f;
 
-		[RequiredField]
 		[UIHint(UIHint.Variable)]
 		[Tooltip("The float variable to be assigned to.")]
 		public FsmFloat outTimingStop = 1.0f;
@@ -69,15 +66,30 @@ namespace HutongGames.PlayMaker.Actions
 		{
 			BallardData ballard;
 			if (BallardDatabase.Instance.GetBallard(ballardCurrent.Value, out ballard) == false)
+			{
+				Debug.Log("Ballard '" + ballardCurrent.Value.ToString() 
+					+ "' doesn't exist"); 
 				return;
+			}
 
 			SequenceData sequence;
 			if (ballard.GetSequence(sequenceCurrent.Value, out sequence) == false)
+			{
+				Debug.Log("Ballard '" + ballard.name 
+					+ "': Sequence '" + sequenceCurrent.Value.ToString() 
+					+ "' doesn't exist!"); 
 				return;
+			}
 
 			ChordData chord;
 			if (sequence.GetChord(chordCurrent.Value, out chord) == false)
+			{
+				Debug.Log("Ballard '" + ballard.name 
+					+ "', Sequence '" + sequenceCurrent.Value.ToString() 
+					+ "': Chord '" + chordCurrent.Value 
+					+ "' doesn't exist!"); 
 				return;
+			}
 
 			outTiming.Value			= chord.timingStart;
 			outTimingStart.Value	= chord.timingStart;
